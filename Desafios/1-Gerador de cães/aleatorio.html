@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Cães 🐾</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #486f7f;
+        }
+        .cartao {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        /* Estilo para a imagem do cão */
+        #imagemCao {
+            width: 300px;
+            height: 300px;
+            object-fit: cover; /* Mantém a proporção da imagem sem a distorcer */
+            border-radius: 8px;
+            margin-bottom: 20px;
+            background-color: #eaeaea; /* Fundo enquanto a imagem carrega */
+        }
+        /* Estilo para o botão */
+        #btnGerar {
+            background-color: #b9ffbb;
+            color: rgb(72, 72, 72);
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #btnGerar:hover {
+            background-color: #458ca0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cartao">
+        <h2>Gerador de Cães</h2>
+        
+        <img id="imagemCao" src="https://via.placeholder.com/300?text=%F0%9F%90%BE+Pata+de+C%C3%A3o" alt="Fotografia de um cão">
+        <br>
+        <button id="btnGerar">Gerar Cão</button>
+    </div>
+
+    <script> 
+// document.getElementById procura um elemento no HTML pelo id
+const botao = document.getElementById('btnGerar');
+const imagem = document.getElementById('imagemCao');
+
+
+// Criamos uma função assíncrona chamada gerarNovoCao
+// "async" permite usar "await" dentro da função
+async function gerarNovoCao() {
+
+    // try serve para tentar executar o código
+    // caso algo dê erro ele será capturado no catch
+    try {
+
+        // Mudamos o texto do botão enquanto a imagem está sendo carregada
+        botao.textContent = "A procurar cãozinho... 🐾";
+
+        // fetch faz uma requisição para uma API na internet
+        // neste caso pedimos uma imagem aleatória de cachorro
+        const resposta = await fetch('https://dog.ceo/api/breeds/image/random');
+
+        // await espera a resposta chegar antes de continuar o código
+        // .json() converte a resposta da API para um objeto JavaScript
+        const dados = await resposta.json();
+
+        // dados.message contém o link da imagem do cachorro
+        // aqui trocamos o "src" da imagem para esse novo link
+        imagem.src = dados.message;
+
+        // Depois que a imagem carrega, voltamos o texto do botão ao normal
+        botao.textContent = "Gerar Cão 🐶";
+
+    } 
+    
+    // Se acontecer algum erro (internet, API fora do ar, etc.)
+    catch (erro) {
+
+        // Mostra o erro no console do navegador
+        console.error("Ops! Ocorreu um erro:", erro);
+
+        // Muda o texto do botão avisando que deu erro
+        botao.textContent = "Erro! Tentar novamente";
+    }
+}
+
+
+// Adicionamos um "escutador de evento" ao botão
+// Quando o usuário clicar nele, a função gerarNovoCao será executada
+botao.addEventListener('click', gerarNovoCao);
+    </script>
+
+</body>
+</html>
